@@ -1,0 +1,13 @@
+[core]
+    remote = minio_data
+    autostage = true
+['remote "db_clean_data"']
+    url = gs://jav-mlops-proyecto3/db_clean_data
+['remote "db_raw_data"']
+    url = gs://jav-mlops-proyecto3/db_raw_data
+['remote "db_ml_data"']
+    url = gs://jav-mlops-proyecto3/db_ml_data
+['remote "data"']
+    url = gs://jav-mlops-proyecto3/data
+['remote "minio_data"']
+    url = gs://jav-mlops-proyecto3/minio_data
