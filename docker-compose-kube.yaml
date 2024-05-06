@@ -13,7 +13,6 @@ services:
       - MYSQL_USER=${MYSQL_USER}
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
-      - local_infile=1
     volumes:
       - ./db_raw_data:/var/lib/mysql
   
@@ -30,7 +29,6 @@ services:
       - MYSQL_USER=${MYSQL_USER}
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
-      - local_infile=1
     volumes:
       - ./db_clean_data:/var/lib/mysql
 
