@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 import os
 import mlflow
@@ -48,13 +48,18 @@ class model_input(BaseModel):
 # OJO: tener en cuenta hacer alguna especie de try except que muestre los errores presentes sobre la API. 
 @app.post("/predict/")
 def predict(item:model_input):
+    try:
 
-    global loaded_model
+        global loaded_model
 
-    data_dict = item.dict()
+        data_dict = item.dict()
 
-    X = pd.DataFrame({key: [value,] for key, value in data_dict.items()})
-  
-    prediction = loaded_model.predict(X)
+        X = pd.DataFrame({key: [value,] for key, value in data_dict.items()})
+    
+        prediction = loaded_model.predict(X)
 
-    return {'prediction': int(prediction[0])}
+        return {'prediction': int(prediction[0])}
+    
+    except:
+
+        raise HTTPException(status_code=400, detail="Bad Request")
