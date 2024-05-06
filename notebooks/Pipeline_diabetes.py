@@ -25,7 +25,7 @@ from sklearn.preprocessing import OneHotEncoder
 
 from sklearn import metrics
 from sklearn.metrics import confusion_matrix
-from sklearn.metrics import accuracy_score
+from sklearn.metrics import accuracy_score, recall_score
 
 ## download the dataset
 # Directory of the raw data files
@@ -109,6 +109,9 @@ df['discharge_disposition_id'] = df['discharge_disposition_id'].fillna(df['disch
 df['admission_source_id'] = df['admission_source_id'].fillna(df['admission_source_id'].mode()[0])
 df.drop(['encounter_id','patient_nbr'],axis=1,inplace=True)
 
+print(df[df['readmitted']==1].shape)
+print(df[df['readmitted']==0].shape)
+
 X = df.drop('readmitted',axis=1)
 y = df['readmitted']
 
@@ -189,3 +192,5 @@ y_pred = preprocessor.predict(X_test)
 print(confusion_matrix(y_test,y_pred))
 
 print(accuracy_score(y_test,y_pred))
+
+print(recall_score(y_test,y_pred))

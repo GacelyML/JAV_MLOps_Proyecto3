@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f docker-compose-kube.yaml -o komposefiles/ --volumes hostPath
+    kompose.version: 1.26.0 (40646f47)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: streamlit
+  name: streamlit
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: streamlit
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -f docker-compose-kube.yaml -o komposefiles/ --volumes hostPath
+        kompose.version: 1.26.0 (40646f47)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/jav_mlops_proyecto3_backend: "true"
+        io.kompose.service: streamlit
+    spec:
+      containers:
+        - args:
+            - streamlit
+            - run
+            - /opt/code/main.py
+            - --server.port=8087
+            - --server.address=0.0.0.0
+          image: streamlit
+          name: streamlit-app
+          ports:
+            - containerPort: 8087
+          resources: {}
+          volumeMounts:
+            - mountPath: /opt/code/
+              name: streamlit-hostpath0
+      restartPolicy: Always
+      volumes:
+        - hostPath:
+            path: /home/gacelydev/Documentos/MINTA/MLOps/Proyecto3/JAV_MLOps_Proyecto3/src/front
+          name: streamlit-hostpath0
+status: {}

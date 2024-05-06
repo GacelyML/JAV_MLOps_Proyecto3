@@ -1,69 +1,60 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
-from sklearn.preprocessing import StandardScaler, OrdinalEncoder, StandardScaler
-from sklearn.compose import ColumnTransformer
-from sklearn.pipeline import Pipeline
 import os
-
-
 import mlflow
-from typing import List, Optional
 import pandas as pd
 
 ### Llamar a partir de mlflow, el URI del modelo puesto en producción. 
 # set minio environment variables
-os.environ['MLFLOW_S3_ENDPOINT_URL'] = "http://10.43.101.154:8081"
-os.environ['AWS_ACCESS_KEY_ID'] = 'minio_user'
-os.environ['AWS_SECRET_ACCESS_KEY'] = 'minio_pwd'
+os.environ['MLFLOW_S3_ENDPOINT_URL'] = "http://minio:8081"
+os.environ['AWS_ACCESS_KEY_ID'] = 'access2024minio'
+os.environ['AWS_SECRET_ACCESS_KEY'] = 'supersecretaccess2024'
 
-# connect to mlflow
-# mlflow.set_tracking_uri("http://10.43.101.154:8083")
+mlflow.set_tracking_uri("http://mlflow:8083")
+mlflow.set_experiment("mlflow_tracking_model_P3")
 
-model_name = "final_model"
+model_name = "diabetes-random-forest-model"
 
-# logged_model = 'runs:/71428bebed2b4feb9635714ea3cdb562/model'
 model_production_uri = "models:/{model_name}/production".format(model_name=model_name)
+
+loaded_model = mlflow.pyfunc.load_model(model_uri=model_production_uri)
 
 ### Inicializar FASTAPI
 app = FastAPI()
-
 ### JSON que define mis variables de entrada de la API. 
 class model_input(BaseModel):
-    Elevation :  int
-    Aspect : int
-    Slope : int
-    Horizontal_Distance_To_Hydrology : int
-    Vertical_Distance_To_Hydrology : int
-    Horizontal_Distance_To_Roadways : int
-    Hillshade_9am : int
-    Hillshade_Noon : int
-    Hillshade_3pm : int
-    Horizontal_Distance_To_Fire_Points : int
-    Wilderness_Area : str
-    Soil_Type : str
+    race : str = 'Caucasian'
+    gender : str = 'Male'
+    age : int = 75
+    admission_type_id : str = 'Emergency'
+    discharge_disposition_id : str = 'Discharged to Home'
+    admission_source_id : str = 'Emergency'
+    time_in_hospital : int = 2
+    num_lab_procedures : int = 36
+    num_procedures : int = 0
+    num_medications : int = 8
+    number_outpatient : int = 0
+    number_emergency : int = 0
+    number_inpatient : int = 1
+    number_diagnoses : int = 9
+    max_glu_serum : str = 'None'
+    A1Cresult : str = 'None'
+    examide : str = 'No'
+    citoglipton : str = 'No'
+    change : str = 'Ch'
+    diabetesMed : str = 'Yes'
 
 # Función Predict que se encarga de ejecutar el predict sobre el modelo generado y retorna una predicción. 
 # OJO: tener en cuenta hacer alguna especie de try except que muestre los errores presentes sobre la API. 
 @app.post("/predict/")
 def predict(item:model_input):
 
-    # global loaded_model
-    # Load model as a PyFuncModel.
-    try:
+    global loaded_model
 
-       # loaded_model = mlflow.pyfunc.load_model(model_uri=model_production_uri)
+    data_dict = item.dict()
 
-        data_dict = item.dict()
-        model_info = data_dict.pop('model', None)
-        
-        # Predice con respecto al modelo que se le especifique. 
-        X = pd.DataFrame({key: value for key, value in data_dict.items()})
+    X = pd.DataFrame({key: [value,] for key, value in data_dict.items()})
+  
+    prediction = loaded_model.predict(X)
 
-        categorical_variables = ['Wilderness_Area', 'Soil_Type']
-        numerical_variables = [feature for feature in X.columns if feature not in categorical_variables]
-        
-        prediction = loaded_model.predict(X.iloc[0].to_frame().T)
-
-        return prediction
-    except Exception as e: 
-        return f"Ocurrió un error: {e} "
+    return {'prediction': int(prediction[0])}

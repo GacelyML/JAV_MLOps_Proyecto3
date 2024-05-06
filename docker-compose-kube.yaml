@@ -33,7 +33,6 @@ services:
       - ./db_clean_data:/var/lib/mysql
 
   fast_api:
-    restart: always
     build: ./docker/fast_api
     ports:
       - 8086:8086

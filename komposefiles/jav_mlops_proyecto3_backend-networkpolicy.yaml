@@ -1,0 +1,14 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  creationTimestamp: null
+  name: jav_mlops_proyecto3_backend
+spec:
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              io.kompose.network/jav_mlops_proyecto3_backend: "true"
+  podSelector:
+    matchLabels:
+      io.kompose.network/jav_mlops_proyecto3_backend: "true"

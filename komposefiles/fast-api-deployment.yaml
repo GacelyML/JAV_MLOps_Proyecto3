@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f docker-compose-kube.yaml -o komposefiles/ --volumes hostPath
+    kompose.version: 1.26.0 (40646f47)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: fast-api
+  name: fast-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: fast-api
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -f docker-compose-kube.yaml -o komposefiles/ --volumes hostPath
+        kompose.version: 1.26.0 (40646f47)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/jav_mlops_proyecto3_backend: "true"
+        io.kompose.service: fast-api
+    spec:
+      containers:
+        - args:
+            - uvicorn
+            - opt.code.main:app
+            - --host
+            - 0.0.0.0
+            - --port
+            - "8086"
+            - --reload
+          image: fast-api
+          name: fast-api
+          ports:
+            - containerPort: 8086
+          resources: {}
+          volumeMounts:
+            - mountPath: /opt/code/
+              name: fast-api-hostpath0
+      restartPolicy: Always
+      volumes:
+        - hostPath:
+            path: /home/gacelydev/Documentos/MINTA/MLOps/Proyecto3/JAV_MLOps_Proyecto3/src/back
+          name: fast-api-hostpath0
+status: {}
