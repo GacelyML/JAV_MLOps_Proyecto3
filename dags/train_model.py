@@ -22,7 +22,7 @@ def get_data(table_name):
     df = pd.read_sql(query, con = conn)
     if table_name == "clean_diabetes_train":
         df_positive = df[df['readmitted']==1]
-        df_negative = df[df['readmitted']==0][:df_positive.shape[0]]
+        df_negative = df[df['readmitted']==0][:df_positive.shape[0]*2]
         df = pd.concat([df_positive,df_negative],ignore_index=True)
         print(df.shape)
     return df.drop('readmitted',axis=1), df['readmitted']
