@@ -1,4 +1,4 @@
-# Proyecto 2: MLOps
+# Proyecto 3: MLOps
 
 ## Por Brayan Carvajal, Juan Pablo Nieto y Nicolás Rojas
 
