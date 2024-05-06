@@ -53,6 +53,9 @@ El código en este repositorio puede ejecutarse siguiendo los siguientes pasos:
     ```shell
     docker compose -f docker-compose-kube.yaml --env-file config.env up --build -d
     ```
+
+- Si desea probar los servicios desplegados a traves de la red PUJ con la maquina virtual, cambie "localhost" por 10.43.101.154 en las siguientes indicaciones 
+
 - Ingrese a Airflow desde un navegador web apuntando a la dirección http://localhost:8080, desde este podrá observar los DAGS construidos para la descarga de los datos, el procesamiento de los mismo y el entrenamiento y registro del modelo con MLFlow
 
 - Ingrese a MLFlow desde un navegador web apuntando a la dirección http://localhost:8083, en esta interfaz se encontraran los diferentes experimentos ejecutados y los modelos registrados, junto con sus artifactos y métricas de rendimiento
