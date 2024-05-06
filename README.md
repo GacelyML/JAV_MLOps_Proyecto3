@@ -40,3 +40,9 @@ El código en este repositorio puede ejecutarse siguiendo los siguientes pasos:
     ```shell
     docker compose down --volumes --remove-orphans
     ```
+
+docker compose -f docker-compose.yaml airflow-init --env-file config.env up --build
+
+docker compose -f docker-compose.yaml --env-file config.env up --build -d
+
+docker compose -f docker-compose-kube.yaml --env-file config.env up --build -d
