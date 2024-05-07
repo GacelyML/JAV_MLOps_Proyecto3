@@ -2,6 +2,8 @@
 
 ## Por Brayan Carvajal, Juan Pablo Nieto y Nicolás Rojas
 
+**El video explicativo del proyecto puede encontrarse en [este link](https://youtu.be/DsWGw1nQwcs).**
+
 Este proyecto busca evaluar el proceso despliegue de MLOPS usando Kubernetes, empezando
 por la recolección y procesamiento de datos, para generar una fuente de información lista para el
 entrenamiento de modelos de Machine Learning. El modelo de mejor desempeño debe usarse para
